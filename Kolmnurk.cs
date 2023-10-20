@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,42 +14,59 @@ namespace Naidis
         TextBox txtA, txtB, txtC;
         Button btn;
         ListView lv;
+        System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
         public Kolmnurk()
         {
             this.Width = 700;
             this.Height = 600;
             this.Text = "Kolmnurk";
 
-            lbl= new Label();
+            BackColor = Color.WhiteSmoke;
+
+            lbl = new Label();
             lbl.Text = "Kolmnurk";
             lbl.Location = new Point(0, 0);
-            lbl.Size = new Size(200, 50);
+            lbl.Size = new Size(this.Width, 50);
             lbl.Font = new Font("Tahoma", 24);
+            lbl.BackColor = Color.DarkGray;
             this.Controls.Add(lbl);
 
+            lv = new ListView();
+            lv.Width = 304;
+            lv.Height = 230;
+            // вид отображения Details для создания столбцов
+            lv.View = View.Details;
+            lv.Columns.Add("Andmed", 150);//столбец
+            lv.Columns.Add("Value", 150);//столбец
 
-            pb = new PictureBox();
-            pb.Location = new Point(this.Width-220, 0);
-            pb.Image = new Bitmap("../../../ravnosotonniyTringle.png");
-            pb.Size = new Size(200, 200);
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
-            this.Controls.Add(pb);
-
-            lbl_tringle = new Label();
-            lbl_tringle.Text = "";
-            lbl_tringle.Location = new Point(pb.Left, pb.Bottom + 5);
-            lbl_tringle.Size = new Size(180,25);
-            this.Controls.Add(lbl_tringle);
+            lv.Items.Add("Külg A:");
+            lv.Items.Add("Külg B:");
+            lv.Items.Add("Külg C:");
+            lv.Items.Add("Olemas:");
+            lv.Items.Add("Perimeeter:");
+            lv.Items.Add("Pindala:");
+            lv.Items.Add("Kõrgus A:");
+            lv.Items.Add("Kõrgus B:");
+            lv.Items.Add("Kõrgus C:");
+            lv.Items.Add("Pindala kõrguse järgi:");
+            lv.Location = new Point(lbl.Left, lbl.Bottom + 10);
+            lv.BackColor = Color.AntiqueWhite;
+            this.Controls.Add(lv);
+            int items = lv.Items.Count;
+            for (int i = 0; i < items; i++)
+            {
+                lv.Items[i].SubItems.Add("");
+            }
 
             lblA = new Label();
             lblB = new Label();
             lblC = new Label();
             lblA.Text = "Külg A:";
-            lblA.Location= new Point(lbl.Left, lbl.Bottom);
+            lblA.Location = new Point(lbl.Left, lv.Bottom + 10);
             lblB.Text = "Külg B:";
-            lblB.Location = new Point(lbl.Left, lblA.Bottom+10);
+            lblB.Location = new Point(lbl.Left, lblA.Bottom + 10);
             lblC.Text = "Külg C:";
-            lblC.Location = new Point(lbl.Left, lblB.Bottom+10);
+            lblC.Location = new Point(lbl.Left, lblB.Bottom + 10);
             this.Controls.Add(lblA);
             this.Controls.Add(lblB);
             this.Controls.Add(lblC);
@@ -73,46 +90,37 @@ namespace Naidis
             btn = new Button();
             btn.Width = 100;
             btn.Height = 50;
-            btn.Location = new Point(pb.Left+50, pb.Bottom+50);
-            btn.Text= "Käivitada";
+            btn.Location = new Point(this.Width - 170, lbl.Bottom + 20);
+            btn.Text = "Käivitada";
+            btn.BackColor = Color.White;
             btn.Click += Btn_Click;
             this.Controls.Add(btn);
 
-            lv = new ListView();
-            lv.Width = 304;
-            lv.Height = 230;
-            // вид отображения Details для создания столбцов
-            lv.View = View.Details;
-            lv.Columns.Add("Andmed",150);//столбец
-            lv.Columns.Add("Value", 150);//столбец
+            pb = new PictureBox();
+            pb.Location = new Point(this.Width - 220, btn.Bottom + 30);
+            pb.Image = new Bitmap("../../../ravnosotonniyTringle.png");
+            pb.Size = new Size(200, 200);
+            pb.SizeMode = PictureBoxSizeMode.Zoom;
+            pb.BorderStyle = BorderStyle.Fixed3D;
+            pb.BackColor = Color.White;
+            this.Controls.Add(pb);
 
-            lv.Items.Add("Külg A:");
-            lv.Items.Add("Külg B:");
-            lv.Items.Add("Külg C:");
-            lv.Items.Add("Olemas:");
-            lv.Items.Add("Perimeeter:");
-            lv.Items.Add("Ruut");
-            lv.Items.Add("Kõrgus A:");
-            lv.Items.Add("Kõrgus B:");
-            lv.Items.Add("Kõrgus C:");
-            lv.Items.Add("Pindala kõrguse järgi:");
-            lv.Location = new Point(lbl.Left,lblC.Bottom+10);
-            this.Controls.Add(lv);
-            int items = lv.Items.Count;
-            for (int i = 0; i < items; i++)
-            {
-                lv.Items[i].SubItems.Add("");
-            }
+            lbl_tringle = new Label();
+            lbl_tringle.Text = "";
+            lbl_tringle.Location = new Point(pb.Left, pb.Bottom + 5);
+            lbl_tringle.Size = new Size(180, 25);
+            this.Controls.Add(lbl_tringle);
         }
 
         private void Btn_Click(object? sender, EventArgs e)
         {
-            DialogResult answer = MessageBox.Show("Kas soovite avada teise vormi?", "Küsimus",MessageBoxButtons.YesNo);
-            if(answer == DialogResult.Yes)
+            DialogResult answer = MessageBox.Show("Kas soovite avada teise vormi?", "Küsimus", MessageBoxButtons.YesNo);
+            if (answer == DialogResult.Yes)
             {
                 Kolmnurk_V2 kolmnurk_V2 = new Kolmnurk_V2();
                 kolmnurk_V2.Show();
             }
+
             else
             {
                 double a, b, c;
@@ -145,10 +153,10 @@ namespace Naidis
                     double h = tringle.Height(a);
 
                     tringle = new Tringle(a, b, c, h);
-                    
+
                     lv.Items[9].SubItems[1].Text = Convert.ToString(tringle.SurfaceH());
 
-                    if (tringle.ExistTrinage==true)
+                    if (tringle.ExistTrinage == true)
                     {
                         lv.Items[3].SubItems[1].Text = "On olemas";
                     }
@@ -163,6 +171,8 @@ namespace Naidis
                     DialogResult result = MessageBox.Show("Valed andmed", "Error");
                 }
             }
+            
+            
         }
         public string TringleType()
         {
